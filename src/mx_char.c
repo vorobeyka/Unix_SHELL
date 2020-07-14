@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../inc/header.h"
 
 void mx_add_char(t_history *node, char ch, int position) {
     int lenn = 0;
@@ -18,6 +18,14 @@ void mx_add_char(t_history *node, char ch, int position) {
     s = NULL;
 }
 
+static void dell_char_part(t_history **node, char **s) {
+    free((*node)->data);
+    (*node)->data = NULL;
+    (*node)->data = mx_strdup(*s);
+    free(*s);
+    *s = NULL;
+}
+
 void mx_dell_char(t_history *node, int position) {
     int lenn = 0;
     char *s = NULL;
@@ -30,11 +38,7 @@ void mx_dell_char(t_history *node, int position) {
             s[i] = node->data[i];
         for (int i = lenn; i > lenn - position - 1; i--)
             s[i - 1] = node->data[i];
-        free(node->data);
-        node->data = NULL;
-        node->data = mx_strdup(s);
-        free(s);
-        s = NULL;
+        dell_char_part(&node, &s);
     }
     else {
         free(node->data);

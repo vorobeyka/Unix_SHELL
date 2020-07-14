@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../inc/header.h"
 
 static int unset(char **cmnd, int i) {
     if (!i) {
@@ -8,7 +8,7 @@ static int unset(char **cmnd, int i) {
     return unset(cmnd, i - 1);
 }
 
-int mx_cmnd_unset(t_built *u) {
+static int mx_cmnd_unset(t_built *u) {
     int len = mx_len_of_array(u->commands) - 1;
 
     return unset(u->commands, len);

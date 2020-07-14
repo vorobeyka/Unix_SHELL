@@ -1,6 +1,17 @@
-#include "header.h"
+#include "../inc/header.h"
 
-int mx_cmndpwd(t_built *u) {
+static int next_pwd(t_built *u) {
+    if (u->commands[1]) {
+        mx_printerr("pwd: too many arguments\n");
+        return 1;
+    } else {
+        mx_printstr(u->curctlg);
+        mx_printstr("\n");
+        return 0;
+    }
+}
+
+static int mx_cmnd_pwd(t_built *u) {
     char *flags = NULL;
 
     if (u->commands[1] && u->commands[1][0] == '-') {
@@ -15,13 +26,14 @@ int mx_cmndpwd(t_built *u) {
         else
             mx_printstr(u->curctlg);
     }
-    else
-        mx_printstr(u->curctlg);
+    else {
+        return next_pwd(u);
+    }
     mx_printstr("\n");
     return 0;
 }
 
 int mx_pwd(char **argv, t_ost *tost) {
     tost->built->commands = argv;
-    return mx_cmndpwd(tost->built);;
+    return mx_cmnd_pwd(tost->built);;
 }

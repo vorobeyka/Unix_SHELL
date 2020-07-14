@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include "../inc/libmx.h"
 
 bool mx_isalpha(int c) {
     return ((c >= 'A' && c <= 'Z')

@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../inc/header.h"
 
 static t_history *create_node(char *data) {
     t_history *node = (t_history *)malloc(sizeof(t_history));
@@ -34,11 +34,12 @@ int mx_lenn_list(t_history *list) {
 }
 
 void mx_dell_list(t_history **list) {
-    if (*list == NULL)
-        return ;
-    t_history *i = *list;
+    t_history *i = NULL;
     t_history *j = NULL;
 
+    if (*list == NULL)
+        return ;
+    i = *list;
     while (i->next != NULL)
         i = i->next;
     if (i->previos) {
