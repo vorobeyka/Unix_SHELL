@@ -14,6 +14,7 @@ $(NAME): $(LIBMX) $(OBJ)
 	@make clean
 	@clang $(FLAGS) $(OBJ) $(LIBMX) -o $(NAME)
 	@printf "\x1b[32;1m$(NAME) created\x1b[0m\n"
+	@sudo cp $(NAME) /bin/
 
 $(LIBMX):
 	@make -C libmx

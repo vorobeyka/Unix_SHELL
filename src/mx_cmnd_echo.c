@@ -37,7 +37,7 @@ static char **array_transform(char **src, int *flags) {
     return rez;
 }
 
-static int mx_cmnd_echo(char **src) {
+static int mx_cmnd_echo(char **src, t_ost *tost) {
     int *flags = mx_create_integer_massive(2);
     char **s = array_transform(check_flags(src, flags), flags);
     int last = 0;
@@ -47,10 +47,10 @@ static int mx_cmnd_echo(char **src) {
         if (*(str + 1))
             mx_printchar(' ');
         else if (flags[0] && !mx_is_one_symb(mx_last_char(*str), *str, &last))
-            mx_printstr("%");
+            tost->kostil = 1;
     }
     if (flags[0] && !last && s && *s)
-        mx_printstr("\n");
+        tost->kostil = tost->kostil ? 1 : 2;
     else if (!flags[0])
         mx_printstr("\n");
     mx_del_strarr(&s);
@@ -61,5 +61,5 @@ static int mx_cmnd_echo(char **src) {
 int mx_echo(char **argv, t_ost *tost) {
     if (tost->env)
         argv++;
-    return mx_cmnd_echo(argv);
+    return mx_cmnd_echo(argv, tost);
 }

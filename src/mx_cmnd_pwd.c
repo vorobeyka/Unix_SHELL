@@ -11,17 +11,30 @@ static int next_pwd(t_built *u) {
     }
 }
 
+static bool check_error_flags(char *flags) {
+    if (flags[0] == '-')
+        flags++;
+    for ( ; flags && *flags; flags++) {
+        if (*flags != 'P' && *flags != 'L') {
+            mx_printerr("pwd: bad option: -");
+            write(2, flags, 1);
+            mx_printerr("\n");
+            return true;
+        }
+    }
+    return false;
+}
+
 static int mx_cmnd_pwd(t_built *u) {
     char *flags = NULL;
 
     if (u->commands[1] && u->commands[1][0] == '-') {
         flags = u->commands[1];
         flags++;
-        if (*flags == '-' && mx_strlen(flags) > 1) {
-            mx_printerr("pwd: --: ilega pparametr\n");
+        if (check_error_flags(flags)) {
             return 1;
         }
-        if (mx_reverse_index(flags, 'L') < mx_reverse_index(flags, 'P'))
+        if (mx_get_char_index(flags, 'P') >= 0)
             mx_printstr(u->ppwd);
         else
             mx_printstr(u->curctlg);

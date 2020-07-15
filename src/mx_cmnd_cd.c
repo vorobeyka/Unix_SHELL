@@ -10,15 +10,18 @@ bool check_char(char c) {
 }
 
 int mx_flagscd(char *str) {
-    for (char *s = str; *s; s++)
-        if (!check_char(*s))
+    for (char *s = str; *s; s++) {
+        if (!check_char(*s)) {
             return mx_error_return("cd: illegal flags\n", -1);
-    if (mx_get_char_index(str, 'P') > mx_get_char_index(str, 's'))
-        return 1;
-    else if (mx_get_char_index(str, 'P') < mx_get_char_index(str, 's'))
+        }
+    }
+    if (mx_get_char_index(str, 's') >= 0) {
         return 0;
-    else
-        return 2;
+    }
+    if (mx_get_char_index(str, 'P') >= 0) {
+        return 1;
+    }
+    return 2;
 }
 
 int mx_cmnd_cd(t_built *u) {

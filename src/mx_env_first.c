@@ -10,6 +10,11 @@ static void clearenv(void) {
         mx_del_strarr(&arr);
     }
     unsetenv("XPC_FLAGS");
+    unsetenv("SHELL");
+    unsetenv("LOGNAME");
+    unsetenv("PATH");
+    unsetenv("PWD");
+    unsetenv("_");
     unsetenv("TERM");
     unsetenv("SECURITYSESSIONID");
     unsetenv("TERM_PROGRAM");

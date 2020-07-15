@@ -9,7 +9,7 @@ static void part_find_flag(char **arr, int *flag, int *result) {
                 *flag = 1;
         }
         else if (s[i] == 's')
-            *flag = 2;
+            *flag = *flag;
         else {
             mx_printerr("which: bat option: -");
             write(2, &s[i], 1);

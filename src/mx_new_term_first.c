@@ -32,7 +32,7 @@ t_built *push_built() {
     rez->commands = NULL;
     rez->curctlg = mx_strdup(getenv("PWD"));
     rez->lpwd = NULL;
-    rez->ppwd = NULL;
+    rez->ppwd = getcwd(NULL, 0);
     if (chdir(rez->curctlg))
         rez->curctlg = getcwd(NULL, 0);
     rez->old_cat = 0;
@@ -40,13 +40,15 @@ t_built *push_built() {
         rez->oldctlg = mx_strdup(getenv("OLDPWD"));
     else
         rez->oldctlg = mx_strdup(rez->curctlg);
+    chdir(rez->curctlg);
     rez->status = 1;
     return rez;
 }
 
 static void for_tost(t_ost **tost) {
     extern char **environ;
-    
+
+    (*tost)->kostil = 0;
     (*tost)->built = push_built();
     (*tost)->error = 0;
     (*tost)->env = environ;

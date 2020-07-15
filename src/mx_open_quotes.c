@@ -4,9 +4,9 @@ static char *parse_not_odd(char *s, int *i, t_ost *tost) {
     char *rez = NULL;
 
     while (s[*i] && s[*i] != '"') {
-        // if (s[*i] == '\\') {
-            // rez = mx_parse_slash(rez, s, i, 1);
-        if (s[*i] == '$')
+        if (s[*i] == '\\')
+            rez = mx_parse_not_odd_slash(rez, s, i);
+        else if (s[*i] == '$')
             rez = mx_to_not_odd(rez, s, i, tost);
         else if (s[*i] == '`') 
             rez = mx_parse_command(rez, s, i, tost);

@@ -30,13 +30,16 @@ static void print_with_home(char *ctlg) {
     if (!getenv("HOME") && chdir(getenv("HOME"))) {
         return;
     }
+    if (getenv("HOME")[0] != '/') {
+        return;
+    }
     char *to_print = mx_replace_substr(ctlg, getenv("HOME"), "~");
 
     mx_long_print(to_print, "\n", NULL, NULL);
     free_mass(to_print, NULL, NULL, NULL);
 }
 
-static int second_step(char *new_catalog, t_built *u) {
+static int second_step(t_built *u) {
     print_with_home(u->oldctlg);
     return mx_cmnd_do_cd(u, mx_strdup(u->oldctlg));
 }
@@ -44,12 +47,13 @@ static int second_step(char *new_catalog, t_built *u) {
 int mx_cmnd_cd_flags(t_built *u) {
     char *new_catalog = NULL;
     int token = mx_flagscd(u->commands[1]);
+
     if (!mx_strcmp(u->commands[1], "--"))
         return first_step(new_catalog, u);
     if (mx_get_substr_index(u->commands[1], "--") == 0)
         return mx_error_return("ush: unknown flags\n", 1);
     if (!mx_strcmp(u->commands[1], "-") && !u->commands[2])
-        return second_step(new_catalog, u);
+        return second_step(u);
     new_catalog = mx_cmnd_cd_new_ctlg(u);
     for (int i = 0; i < 3; i++)
         if (i == token)

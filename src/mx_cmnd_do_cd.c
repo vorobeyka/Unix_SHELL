@@ -20,12 +20,16 @@ char *mx_to_ctlg(char *str) {
 }
 
 static void check_link(t_cd *cd, char *ctlg) {
+    char *tmp = mx_cmnd_cd_dots(ctlg);
+
     cd->tmp = (char *) malloc(512 * sizeof(char));
-    if (!chdir(ctlg)) {
-        cd->link = mx_cmnd_cd_dots(ctlg);
+    if (!chdir(tmp)) {
+        cd->link = mx_strdup(tmp);
         cd->new = mx_strdup(cd->link);
         cd->phys = getcwd(NULL, 0);
     }
+    if (tmp)
+        free(tmp);
 }
 
 static t_cd *push_cd(char *ctlg) {

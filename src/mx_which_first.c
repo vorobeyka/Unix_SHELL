@@ -56,6 +56,6 @@ void mx_find_built_in(char *str, int flag, int *result) {
         if (mx_strcmp(builtin[i], str) == 0) {
             *result = 0;
             if (flag != 2)
-                printf("%s: ush built-in comand\n", str);
+                printf("%s: ush built-in command\n", str);
         }
 }

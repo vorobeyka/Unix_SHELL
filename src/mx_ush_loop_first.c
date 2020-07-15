@@ -40,9 +40,23 @@ static void what_i_need_to_print(int flag, t_ost *tost) {
     mx_printstr("> ");
 }
 
+void mx_print_echo_kostil(int *value) {
+    switch (*value) {
+    case 1:
+        mx_printstr("%\n");
+        break;
+    default:
+        mx_printstr("\n");
+        break;
+    }
+    *value = 0;
+}
+
 void mx_print_prompt(t_ost *tost) {
     char unicorn[] = {0xF0, 0x9F, 0xA6, 0x84};
 
+    if (tost->kostil)
+        mx_print_echo_kostil(&tost->kostil);
     if (tost->flag == 0)
         mx_printstr("u$h> ");
     else if (tost->flag >= 1 && tost->flag <= 3)
