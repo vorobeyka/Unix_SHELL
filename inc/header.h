@@ -89,7 +89,7 @@ typedef struct s_ost {
     int pars;
     int status;
     int error;
-    int kostil;
+    bool kostil;
     char *path;
     char **env;
     struct termios old;
@@ -248,5 +248,6 @@ char *mx_parse_baks(char *s, int *i, t_ost *tost);
 char *mx_prog_out(char **argv, t_ost *tost);
 char **mx_split_commands(char *str, t_ost *tost);
 char *mx_parse_not_odd_slash(char *add, char *s, int *i);
+char mx_add_white(char c);
 
 #endif

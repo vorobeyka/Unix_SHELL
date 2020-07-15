@@ -12,6 +12,10 @@ static bool check_slash_parse(char c) {
 }
 
 char *mx_parse_not_odd_slash(char *add, char *s, int *i) {
+    if (mx_add_white(s[*i + 1])) {
+        *i += 1;
+        add = mx_add(add, mx_add_white(s[*i]), i);
+    }
     if (check_slash_parse(s[*i + 1])) {
         add = mx_add(add, s[*i], i);
         add = mx_add(add, s[*i], i);

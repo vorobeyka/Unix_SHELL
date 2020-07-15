@@ -1,6 +1,6 @@
 #include "../inc/header.h"
 
-static char add_white(char c) {
+char mx_add_white(char c) {
     switch (c) {
         case 'n':
             return '\n';
@@ -32,9 +32,9 @@ static char *echo_parse(char *str, char *s, int *i) {
         *i += 1;
         rez = mx_add(rez, s[*i], i);
     }
-    else if (add_white(s[*i + 1])) {
+    else if (mx_add_white(s[*i + 1])) {
         *i += 1;
-        rez = mx_add(rez, add_white(s[*i]), i);
+        rez = mx_add(rez, mx_add_white(s[*i]), i);
     }
     else 
         rez = mx_add(rez, s[*i], i);

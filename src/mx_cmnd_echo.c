@@ -47,11 +47,9 @@ static int mx_cmnd_echo(char **src, t_ost *tost) {
         if (*(str + 1))
             mx_printchar(' ');
         else if (flags[0] && !mx_is_one_symb(mx_last_char(*str), *str, &last))
-            tost->kostil = 1;
+            tost->kostil = true;
     }
-    if (flags[0] && !last && s && *s)
-        tost->kostil = tost->kostil ? 1 : 2;
-    else if (!flags[0])
+    if (!flags[0])
         mx_printstr("\n");
     mx_del_strarr(&s);
     free(flags);

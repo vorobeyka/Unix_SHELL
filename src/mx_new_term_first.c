@@ -48,7 +48,7 @@ t_built *push_built() {
 static void for_tost(t_ost **tost) {
     extern char **environ;
 
-    (*tost)->kostil = 0;
+    (*tost)->kostil = false;
     (*tost)->built = push_built();
     (*tost)->error = 0;
     (*tost)->env = environ;
