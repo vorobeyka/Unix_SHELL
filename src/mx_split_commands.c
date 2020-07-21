@@ -3,54 +3,48 @@
 static char *to_add(char *add, char *str, int *i, int *err) {
     int token = mx_check_delims(str[*i]);
 
-    add = str[*i] == '\\' ? mx_parse_slash(add, str, i, 0)
+    add = str[*i] == '\\' ? mx_parse_slash(add, str, i)
           : !token ? mx_split_quotes(add, str, err, i)
           : token < 3 ? mx_split_hooks_baks(add, str, i, err)
           : mx_add(add, str[*i], i);
     return add;
 }
 
-char *mx_parse_command(char *str, char *s, int *i, t_ost *tost) {
-    char *rez = mx_strdup(str);
-    char *command = NULL;
-    char *rezult = NULL;
-    char **arr = NULL;
+static char *add_to_command_x2(char *str, char *s, int *i, t_ost *tost) {
+    if (mx_check_quote(s[*i]) > 0) {
+        char c = s[*i];
 
-    *i += 1;
-    free_mass(str, NULL, NULL, NULL);
-    while (s && s[*i] && s[*i] != '`')
-        command = mx_add(command, s[*i], i);
-    if (s[*i] == '`')
-        *i += 1;
-    arr = mx_parse_all(command, tost);
-    if (arr) {
-        rezult = mx_prog_out(arr, tost);
-        mx_del_strarr(&arr);
+        str = mx_add(str, s[*i], i);
+        for ( ; s[*i] && s[*i] != c; )
+            str = mx_add(str, s[*i], i);
+        if (s[*i])
+            str = mx_add(str, s[*i], i);
+        return str;
     }
-    free(command);
-    return mx_super_join(rez, rezult, 3);
+    else if (s[*i] == '$' && s[*i + 1] == '(') {
+        *i += 1;
+        return mx_parse_command_x2(str, s, i, tost);
+    }
+    else if (s[*i] == '`') {
+        return mx_parse_command_x2(str, s, i, tost);
+    }
+    else {
+        return mx_add(str, s[*i], i);
+    }
 }
 
 char *mx_parse_command_x2(char *str, char *s, int *i, t_ost *tost) {
-    char *rez = mx_strdup(str);
     char *command = NULL;
-    char *rezult = NULL;
-    char **arr = NULL;
+    char c = s[*i] == '(' ? ')' : '`';
 
     *i += 1;
-    if (str)
-        free(str);
-    while (s && s[*i] && s[*i] != ')')
-        command = mx_add(command, s[*i], i);
-    if (s[*i] == ')')
+    while (s && s[*i] && s[*i] != c)
+        command = add_to_command_x2(command, s, i, tost);
+    if (s[*i] == c)
         *i += 1;
-    arr = mx_parse_all(command, tost);
-    if (arr) {
-        rezult = mx_prog_out(arr, tost);
-        mx_del_strarr(&arr);
-    }
-    free(command);
-    return mx_super_join(rez, rezult, 3);
+    str = mx_super_join(str, mx_prog_out(command, tost), 3);
+    mx_free_mass(command, NULL, NULL, NULL);
+    return str;
 }
 
 char **mx_split_commands(char *str, t_ost *tost) {
@@ -61,13 +55,13 @@ char **mx_split_commands(char *str, t_ost *tost) {
         mx_shift_spaces(str, &i);
         add = to_add(add, str, &i, &tost->error);
         if (tost->error) {
-            free_mass(add, NULL, NULL, NULL);
+            mx_free_mass(add, NULL, NULL, NULL);
             mx_del_strarr(&rez);
             return NULL;
         }
         if (!str[i] || str[i] == ' ') {
             rez = mx_resize_one(rez, add);
-            free_mass(add, NULL, NULL, NULL);
+            mx_free_mass(add, NULL, NULL, NULL);
             add = NULL;
         }
     }

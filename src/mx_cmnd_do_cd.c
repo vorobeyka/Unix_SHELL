@@ -13,7 +13,7 @@ char *mx_to_ctlg(char *str) {
 
         for (int i = 0; i < mx_strlen(str) - 1; )
             rez = mx_add(rez, str[i], &i);
-        free_mass(str, NULL, NULL, NULL);
+        mx_free_mass(str, NULL, NULL, NULL);
         return rez;
     }
     return str;
@@ -48,19 +48,19 @@ int mx_cmnd_do_cd(t_built *u, char *ctlg) {
         char *error_message = "cd: No such file or directory: ";
 
         mx_print_long_err(error_message, input_catalog(u), "\n", NULL);
-        free_mass(ctlg, NULL, NULL, NULL);
+        mx_free_mass(ctlg, NULL, NULL, NULL);
         return 1;
     }
     u->cd = push_cd(ctlg);
     if (u->cd->for_oldpwd)
         setenv("OLDPWD", u->cd->for_oldpwd, 1);
-    free_mass(u->curctlg, u->lpwd, u->ppwd, u->oldctlg);
+    mx_free_mass(u->curctlg, u->lpwd, u->ppwd, u->oldctlg);
     u->oldctlg = mx_strdup(getenv("OLDPWD"));
     u->curctlg = mx_strdup(u->cd->new);
     setenv("PWD", u->curctlg, 1);
     u->lpwd = mx_strdup(u->cd->link);
     u->ppwd = mx_strdup(u->cd->phys);
-    free_mass(u->cd->link, u->cd->new, ctlg, u->cd->phys);
-    free_mass(u->cd->tmp, u->cd, NULL, NULL);
+    mx_free_mass(u->cd->link, u->cd->new, ctlg, u->cd->phys);
+    mx_free_mass(u->cd->tmp, u->cd, NULL, NULL);
     return 0;
 }

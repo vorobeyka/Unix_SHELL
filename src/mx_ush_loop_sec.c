@@ -29,7 +29,7 @@ void mx_clean_history(t_history *node) {
         mx_dell_list(&node);
 }
 
-static int pre_builtin(char *src, t_ost *tost) {
+int pre_builtin(char *src, t_ost *tost) {
     tost->pars = 1;
     int result = 0;
     char **s = mx_parse_all(src, tost);
@@ -61,14 +61,8 @@ int mx_start(t_ost *tost, char *com_line) {
         return result;
     ckeck_last_slesh(command, &tost->exit_slesh);
     for (int i = 0; command && command[i]; i++) {
-        if (mx_pre_check(command[i], tost, 0))
-            result = mx_pre_support(tost, command[i]);
-        else if (mx_pre_check(command[i], tost, 1))
-            result = mx_command(tost->support, command[i], tost);
-        else if (mx_first_built_check(command[i]))
-            result = pre_builtin(command[i], tost);
-        else
-            result = mx_ush_execute(command[i], tost);
+        result = mx_if_else(command, i, tost);
+        tost->status = result;
     }
     mx_del_strarr(&command);
     return result;

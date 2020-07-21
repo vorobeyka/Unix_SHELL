@@ -51,12 +51,12 @@ int mx_cmnd_export_recurs(char **cmnd, int i, int *err) {
 
     if (*err) {
         mx_print_long_err("export: ", cmnd[i], " not valid ident\n", NULL);
-        free_mass(env_name, env_value, NULL, NULL);
+        mx_free_mass(env_name, env_value, NULL, NULL);
         *err = 0;
         return 1;
     }
     else
         setenv(env_name, env_value, 1);
-    free_mass(env_name, env_value, NULL, NULL);
+    mx_free_mass(env_name, env_value, NULL, NULL);
     return mx_cmnd_export_recurs(cmnd, i - 1, err);
 }

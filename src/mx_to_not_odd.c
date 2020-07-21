@@ -4,24 +4,23 @@ static char *parse_env(char *s, int *i, t_ost *tost) {
     char *rez = NULL;
     char *tmp = NULL;
 
-    *i += 1;
     if (s[*i] == '{')
         tmp = mx_add_with_hook(s, i, tost);
     else
         tmp = mx_add_with_laters(s, i);
     if (tmp && getenv(tmp))
         rez = mx_strdup(getenv(tmp));
-    free_mass(tmp, NULL, NULL, NULL);
+    mx_free_mass(tmp, NULL, NULL, NULL);
     return rez;
 }
 
 char *mx_parse_baks(char *s, int *i, t_ost *tost) {
-    if (s[*i + 1]
-        && (mx_check_delims(s[*i + 1]) == 3
-        || mx_check_delims(s[*i + 1]) == 1)) {
+    *i += 1;
+    if (s[*i]
+        && (mx_check_delims(s[*i]) == 3
+        || mx_check_delims(s[*i]) == 1)) {
         return parse_env(s, i, tost);
     }
-    *i += 1;
     return mx_strdup("$");
 }
 
@@ -29,16 +28,18 @@ char *mx_split_quotes_x2(char *add, char *str, int *i, int *err) {
     char *rez = add ? mx_strdup(add) : NULL;
 
     rez = mx_add(rez, str[*i], i);
-    for ( ; str[*i] && str[*i] != ')'; )
-        rez = mx_add(rez, str[*i], i);
+    for ( ; str[*i] && str[*i] != ')'; ) {
+        rez = str[*i] == '$' && str[*i + 1] == '(' ? mx_split_quotes_x2(rez, str, i, err)
+            : mx_add(rez, str[*i], i);
+    }
     if (!str[*i]) {
         mx_printerr("Odd number of quotes.\n");
-        free_mass(rez, add, NULL, NULL);
+        mx_free_mass(rez, add, NULL, NULL);
         *err = 1;
         return NULL;
     }
     rez = mx_add(rez, str[*i], i);
-    free_mass(add, NULL, NULL, NULL);
+    mx_free_mass(add, NULL, NULL, NULL);
     return rez;
 }
 

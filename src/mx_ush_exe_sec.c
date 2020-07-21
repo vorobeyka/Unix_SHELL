@@ -6,30 +6,24 @@ static void error_print_env(char *str) {
     mx_printerr(": No such file or directory\n");
 }
 
-static void mx_other_exe(char **argv, t_ost *tost, char *str) {
+static void mx_other_exe(char **argv, t_ost *tost, char *str, int fl) {
     int result = 0;
 
-    if (mx_strcmp(argv[0], "./ush") == 0) {
-        if (execve(tost->path, argv, tost->env) < 0) {
-            perror("ush: execve");
-            exit(EXIT_FAILURE);
-        }
-    }
-    else if ((mx_get_char_index(argv[0], '/') != -1
-            && execv(argv[0], argv) < 0)
-            || (getenv("PATH") && execvp(argv[0], argv) < 0))
+    if (mx_strcmp(argv[0], "./ush") == 0)
+        mx_run_shell(argv, tost, str, fl);
+    else {
+        execvp(argv[0], argv);
         result = 127;
-    if ((!getenv("PATH") || !str) && mx_strlen(argv[0]) > 0) {
-        mx_long_error_print("ush: command not found: ",
+        if (str)
+            error_print_env(str);
+        else
+            mx_long_error_print("ush: command not found: ",
                             argv[0], "\n", NULL);
-        exit(EXIT_FAILURE);
     }
-    else if (mx_strlen(argv[0]) > 0)
-        error_print_env(str);
     exit(result);
 }
 
-void mx_exe(char **command, t_ost *tost, char *str) {
+void mx_exe(char **command, t_ost *tost, char *str, int fl) {
     int result = 0;
 
     if (command && mx_chech_support(command)) {
@@ -44,7 +38,7 @@ void mx_exe(char **command, t_ost *tost, char *str) {
     else if (command && mx_check_builtin(command[0]))
         result = mx_builtin(command, tost);
     else if (command)
-        mx_other_exe(command, tost, str);
+        mx_other_exe(command, tost, str, fl);
     exit(result);
 }
 
@@ -53,7 +47,7 @@ static void chose_yur_way(int fd[2], char **command, t_ost *tost) {
     close(fd[1]);
     dup2(fd[0], STDIN_FILENO);
     close(fd[0]);
-    mx_exe(command, tost, NULL);
+    mx_exe(command, tost, NULL, 0);
 }
 
 void mx_pipe_rec(char **arr, int lenn, t_ost *tost) {
@@ -62,7 +56,7 @@ void mx_pipe_rec(char **arr, int lenn, t_ost *tost) {
     pid_t pid;
 
     if (lenn == 0)
-        mx_exe(command, tost, NULL);
+        mx_exe(command, tost, NULL, 0);
     if (pipe(fd) == -1)
         perror("ush: pipe");
     pid = fork();

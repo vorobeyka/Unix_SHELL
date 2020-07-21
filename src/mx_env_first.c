@@ -12,7 +12,7 @@ static void clearenv(void) {
     unsetenv("XPC_FLAGS");
     unsetenv("SHELL");
     unsetenv("LOGNAME");
-    unsetenv("PATH");
+    // unsetenv("PATH");
     unsetenv("PWD");
     unsetenv("_");
     unsetenv("TERM");

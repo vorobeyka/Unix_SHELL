@@ -12,8 +12,12 @@ static char *create_buff(void) {
 
 static void shell_level(void) {
     char *old = getenv("SHLVL");
-    char *new = mx_itoa(atoi(old) + 1);
-
+    char *new = NULL;
+    
+    if (old)
+        new = mx_itoa(atoi(old) + 1);
+    else
+        new = mx_itoa(1);
     if (setenv("SHLVL", new, 1) == -1) {
         free(new);
         perror("ush: setenv");

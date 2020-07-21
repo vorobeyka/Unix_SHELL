@@ -1,6 +1,6 @@
 #include "../inc/header.h"
 
-void free_mass(void *v1, void *v2, void *v3, void *v4) {
+void mx_free_mass(void *v1, void *v2, void *v3, void *v4) {
     if (v1)
         free(v1);
     if (v2)

@@ -33,7 +33,8 @@ static char **array_transform(char **src, int *flags) {
     char **rez = mx_array_copy_strs(src);
 
     for (int i = 0; rez[i]; i++)
-        rez[i] = !flags[1] ? mx_cmnd_echo_trans(rez[i]) : rez[i];
+        rez[i] = flags[1] ? mx_cmnd_echo_trans(rez[i])
+               : mx_cmnd_echo_trans_x2(rez[i]);
     return rez;
 }
 
@@ -44,12 +45,16 @@ static int mx_cmnd_echo(char **src, t_ost *tost) {
 
     for (char **str = s; str && *str; str++) {
         mx_printstr(*str);
-        if (*(str + 1))
+        if (*(str + 1)) {
             mx_printchar(' ');
-        else if (flags[0] && !mx_is_one_symb(mx_last_char(*str), *str, &last))
+        }
+        else if (flags[0]
+                 && !mx_is_one_symb(mx_last_char(*str), *str, &last)) {
             tost->kostil = true;
+        }
     }
     if (!flags[0])
+        // tost->kostil = true;
         mx_printstr("\n");
     mx_del_strarr(&s);
     free(flags);

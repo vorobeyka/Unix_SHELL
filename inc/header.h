@@ -19,7 +19,6 @@
 #include <uuid/uuid.h>
 #include <grp.h>
 #include <time.h>
-#include <malloc.h>
 #include <signal.h>
 #include <setjmp.h>
 #include <pwd.h>
@@ -115,7 +114,7 @@ void mx_dell_full(t_history *list);
 bool mx_cech_end(void);
 void mx_long_print(char *src1, char *src2, char *src3, char *src4);
 void mx_long_error_print(char *src1, char *src2, char *src3, char *src4);
-void free_mass(void *v1, void *v2, void *v3, void *v4);
+void mx_free_mass(void *v1, void *v2, void *v3, void *v4);
 int mx_lenn_mass(char **arr);
 int mx_reverse_index(char *src, char s);
 int mx_error_return(char *msg, int value);
@@ -166,12 +165,14 @@ char *mx_cmnd_cd_dots(char *ctlg);
 char *mx_to_ctlg(char *str);
 int mx_pwd(char **argv, t_ost *tost);
 int mx_echo(char **argv, t_ost *tost);
+char *mx_cmnd_echo_trans_x2(char *src);
 char mx_last_char(char *str);
 int mx_kill(char **argv, t_ost *tost);
 char *mx_find_num_name(char *src1, int fl);
 char *mx_cmnd_cd_new_ctlg(t_built *u);
 char *mx_correct_ctlg(t_built *u, char *str);
 char *mx_cmnd_echo_trans(char *src);
+char *mx_shift_one(char *add, char *s, char c, int *i);
 char **mx_add_env(char **shift);
 char **mx_option_loop(char **arr, int *flag);
 bool mx_is_space(char c);
@@ -204,7 +205,7 @@ int mx_start(t_ost *tost, char *com_line);
 
 // Ush exe
 void mx_pipe_rec(char **arr, int lenn, t_ost *tost);
-void mx_exe(char **command, t_ost *tost, char *str);
+void mx_exe(char **command, t_ost *tost, char *str, int fl);
 int mx_ush_execute(char *command, t_ost *tost);
 
 // Signal
@@ -229,11 +230,11 @@ void mx_dell_job(t_jobs **list, int pid);
 char **mx_parse_all(char *line, t_ost *tost);
 char **mx_parse_pipes_and_tz(char *line, char c);
 char *mx_open_quotes(char *s, t_ost *tost);
-char *mx_parse_slash(char *str, char *s, int *i, int flag);
+char *mx_parse_slash(char *str, char *s, int *i);
 void mx_shift_spaces(char *str, int *i);
 void mx_find_delim(char *str, char delim, int *i);
 void mx_last_delim(char *str, char delim, int *i);
-char *mx_parse_command(char *str, char *s, int *i, t_ost *tost);
+char *mx_add_quotes(char *str, char *s, int *i, t_ost *tost);
 char *mx_parse_command_x2(char *str, char *s, int *i, t_ost *tost);
 char *mx_to_not_odd(char *rez, char *s, int *i, t_ost *tost);
 char *mx_parse_odd(char *s, int *i);
@@ -245,9 +246,16 @@ char *mx_split_quotes_x2(char *add, char *str, int *i, int *err);
 char *mx_split_quotes(char *add, char *str, int *err, int *i);
 char *mx_split_hooks_baks(char *add, char *str, int *i, int *err);
 char *mx_parse_baks(char *s, int *i, t_ost *tost);
-char *mx_prog_out(char **argv, t_ost *tost);
+char *mx_prog_out(char *line, t_ost *tost);
 char **mx_split_commands(char *str, t_ost *tost);
 char *mx_parse_not_odd_slash(char *add, char *s, int *i);
 char mx_add_white(char c);
+char **mx_resize_array(char **s, char **add);
+
+int mx_if_else(char **command, int i, t_ost *tost);
+int pre_builtin(char *src, t_ost *tost);
+void mx_env_part(char **argv, t_ost *tost);
+void mx_run_shell(char **argv, t_ost *tost, char *str, int fl);
+void mx_env_set_grp(char **argv, t_ost *tost, pid_t pid);
 
 #endif

@@ -8,15 +8,17 @@ static int (*cd_switch[3]) (t_built *, char *) = {
 
 static void print_with_home(char *ctlg) {
     if (!getenv("HOME") && chdir(getenv("HOME"))) {
+        mx_long_print(ctlg, "\n", NULL, NULL);
         return;
     }
     if (getenv("HOME")[0] != '/') {
+        mx_long_print(ctlg, "\n", NULL, NULL);
         return;
     }
     char *to_print = mx_replace_one_substr(ctlg, getenv("HOME"), "~");
 
     mx_long_print(to_print, "\n", NULL, NULL);
-    free_mass(to_print, NULL, NULL, NULL);
+    mx_free_mass(to_print, NULL, NULL, NULL);
 }
 
 static int second_step(t_built *u) {

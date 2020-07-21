@@ -1,6 +1,14 @@
 #ifndef LIBMX_H
 #define LIBMX_H
 
+#ifdef __APPLE__
+    #include <malloc/malloc.h>
+#else
+    #define _GNU_SOURCE
+    #include <malloc.h>
+    #define malloc_size(x) malloc_usable_size(x)
+    #define reallocf realloc
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,12 +17,11 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/uio.h>
-#include <malloc.h>
 
 typedef struct s_list {
 	void *data;
 	struct s_list *next;
-} t_list;
+}			   t_list;
 
 int mx_atoi(const char *str);
 bool mx_isalpha(int c);

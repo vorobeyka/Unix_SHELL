@@ -9,7 +9,7 @@ static char *delete_dots(char *str) {
         else
             rez = mx_add(rez, str[i], &i);
     }
-    free_mass(str, NULL, NULL, NULL);
+    mx_free_mass(str, NULL, NULL, NULL);
     return rez;
 }
 
@@ -53,7 +53,7 @@ static char *dir_out(char *s) {
             rez = mx_add(rez, s[i], &i);
         }
     }
-    free_mass(s, NULL, NULL, NULL);
+    mx_free_mass(s, NULL, NULL, NULL);
     return rez;
 }
 
@@ -84,6 +84,6 @@ char *mx_cmnd_cd_dots(char *ctlg) {
     rez = delete_dots(clean_slash(ctlg));
     tmp = rez;
     rez = dir_out(clean_slash(rez));
-    free_mass(tmp, NULL, NULL, NULL);
+    mx_free_mass(tmp, NULL, NULL, NULL);
     return rez;
 }

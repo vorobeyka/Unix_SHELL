@@ -21,24 +21,47 @@ char mx_add_white(char c) {
     }
 }
 
-static char *echo_parse(char *str, char *s, int *i) {
-    char *rez = mx_strdup(str);
+static char is_white(char c) {
+    switch (c) {
+        case '\n':
+            return 'n';
+        case '\r':
+            return 'r';
+        case '\f':
+            return 'f';
+        case '\a':
+            return 'a';
+        case '\b':
+            return 'b';
+        case '\t':
+            return 't';
+        case '\v':
+            return 'v';
+        default:
+            return 0;
+    }
+}
 
-    if (s[*i + 1] == '0' && s[*i + 2] == '3' && s[*i + 3] == '3') {
-        rez = mx_add(rez, '\033', i);
-        *i += 3;
+char *mx_cmnd_echo_trans_x2(char *src) {
+    char *rez = NULL;
+
+    for (int i = 0; src[i]; ) {
+        if (src[i] =='\\') {
+            if (src[i + 1] == '\\') {
+                i++;
+                rez = mx_add(rez, src[i], &i);
+            }
+            else if (mx_add_white(src[i + 1])) {
+                i++;
+                rez = mx_add(rez, mx_add_white(src[i]), &i);
+            }
+            else
+                rez = mx_add(rez, src[i], &i);
+        }
+        else
+            rez = mx_add(rez, src[i], &i);
     }
-    else if (s[*i + 1] == '\\') {
-        *i += 1;
-        rez = mx_add(rez, s[*i], i);
-    }
-    else if (mx_add_white(s[*i + 1])) {
-        *i += 1;
-        rez = mx_add(rez, mx_add_white(s[*i]), i);
-    }
-    else 
-        rez = mx_add(rez, s[*i], i);
-    free_mass(str, NULL, NULL, NULL);
+    mx_free_mass(src, NULL, NULL, NULL);
     return rez;
 }
 
@@ -46,8 +69,11 @@ char *mx_cmnd_echo_trans(char *src) {
     char *rez = NULL;
 
     for (int i = 0; src[i]; ) {
-        if (src[i] == '\\')
-            rez = echo_parse(rez, src, &i);
+        if (is_white(src[i])) {
+            rez = mx_add(rez, '\\', &i);
+            i--;
+            rez = mx_add(rez, is_white(src[i]), &i);
+        }
         else
             rez = mx_add(rez, src[i], &i);
     }

@@ -39,7 +39,7 @@ void mx_env_part(char **argv, t_ost *tost) {
     shift = mx_option_loop(shift, &flag);
     shift = mx_add_env(shift);
     if (*shift && mx_strcmp(*shift, "env") != 0)
-        mx_exe(shift, tost, *shift);
+        mx_exe(shift, tost, *shift, flag);
     else if (flag != 1)
         mx_print_env();
     exit(0);
@@ -56,9 +56,13 @@ int mx_env(char **argv, t_ost *tost) {
     if (pid < 0)
         perror("ush: fork");
     else if (pid == 0)
-        mx_env_part(argv, tost);
+        mx_env_set_grp(argv, tost, pid);
     else
-        waitpid(pid, &status, 0);
+        wait(&status);
+    if (isatty(0)) {
+        tcsetpgrp(0, getpid());
+        tcsetpgrp(1, getpid());
+    }
     if (WIFEXITED(status))
         status = WEXITSTATUS(status);
     return status;
