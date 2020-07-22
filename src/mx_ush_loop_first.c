@@ -55,6 +55,7 @@ void mx_print_echo_kostil(int *value) {
 void mx_print_prompt(t_ost *tost) {
     char unicorn[] = {0xF0, 0x9F, 0xA6, 0x84, '\0'};
 
+    tost->kostil_x2 = false;
     if (tost->kostil) {
         mx_printstr("\n");
         tost->kostil = false;

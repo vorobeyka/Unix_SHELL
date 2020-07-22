@@ -58,6 +58,7 @@ char *mx_parse_command_x2(char *str, char *s, int *i, t_ost *tost) {
     if (s[*i] == c)
         *i += 1;
     str = mx_super_join(str, mx_prog_out(command, tost), 3);
+    tost->kostil_x2 = false;
     mx_free_mass(command, NULL, NULL, NULL);
     return str;
 }

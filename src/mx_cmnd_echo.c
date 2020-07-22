@@ -49,12 +49,12 @@ static int mx_cmnd_echo(char **src, t_ost *tost) {
             mx_printchar(' ');
         }
         else if (flags[0]
+                 && !tost->kostil_x2
                  && !mx_is_one_symb(mx_last_char(*str), *str, &last)) {
             tost->kostil = true;
         }
     }
     if (!flags[0])
-        // tost->kostil = true;
         mx_printstr("\n");
     mx_del_strarr(&s);
     free(flags);

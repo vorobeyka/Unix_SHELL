@@ -89,6 +89,7 @@ typedef struct s_ost {
     int status;
     int error;
     bool kostil;
+    bool kostil_x2;
     char *path;
     char **env;
     struct termios old;

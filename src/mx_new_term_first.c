@@ -53,6 +53,7 @@ static void for_tost(t_ost **tost) {
     extern char **environ;
 
     (*tost)->kostil = false;
+    (*tost)->kostil_x2 = false;
     (*tost)->built = push_built();
     (*tost)->error = 0;
     (*tost)->env = environ;

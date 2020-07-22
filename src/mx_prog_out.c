@@ -54,6 +54,7 @@ char *mx_prog_out(char *line, t_ost *tost) {
     int fd[2];
     int old = -1;
 
+    tost->kostil_x2 = true;
     if (pipe(fd) == -1)
         perror("ush: pipe");
     old = dup(STDOUT_FILENO);
