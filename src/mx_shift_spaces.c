@@ -1,7 +1,7 @@
 #include "../inc/header.h"
 
 void mx_shift_spaces(char *str, int *i) {
-    if (str[*i] == ' ') {
+    if (str && str[*i] == ' ') {
         *i += 1;
         mx_shift_spaces(str, i);
     }

@@ -82,10 +82,10 @@ typedef struct s_be_happy {
 }              t_be_happy;
 
 typedef struct s_ost {
+    int trim;
     int flag;
     int exit_slesh;
     int out;
-    int pars;
     int status;
     int error;
     bool kostil;
@@ -251,7 +251,7 @@ char **mx_split_commands(char *str, t_ost *tost);
 char *mx_parse_not_odd_slash(char *add, char *s, int *i);
 char mx_add_white(char c);
 char **mx_resize_array(char **s, char **add);
-
+char *mx_cut_subsh(char *str);
 int mx_if_else(char **command, int i, t_ost *tost);
 int pre_builtin(char *src, t_ost *tost);
 void mx_env_part(char **argv, t_ost *tost);

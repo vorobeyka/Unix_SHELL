@@ -73,9 +73,11 @@ char **mx_split_comm(char *s, char delim) {
 
 char **mx_parse_pipes_and_tz(char *line, char c) {
     char **rez = NULL;
+    char *new_line = mx_cut_subsh(line);
 
-    if (line) {
-        rez = mx_split_comm(line, c);
+    if (new_line) {
+        rez = mx_split_comm(new_line, c);
     }
+    mx_free_mass(new_line, NULL, NULL, NULL);
     return rez;
 }

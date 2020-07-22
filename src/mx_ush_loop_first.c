@@ -84,7 +84,9 @@ void mx_ush_loop(t_ost *tost) {
         tcsetattr(0, TCSAFLUSH, &tost->old);
         mx_change_last(&tost->history, line);
         mx_clean_history(tost->history);
-        if (line)
+        if (line) {
+            tost->trim = 0;
             tost->status = mx_start(tost, tost->history->data);
+        }
     }
 }

@@ -8,7 +8,7 @@ static char *parse_not_odd(char *s, int *i, t_ost *tost) {
             rez = mx_parse_not_odd_slash(rez, s, i);
         else if (s[*i] == '$')
             rez = mx_to_not_odd(rez, s, i, tost);
-        else if (s[*i] == '`') 
+        else if (s[*i] == '`')
             rez = mx_parse_command_x2(rez, s, i, tost);
         else
             rez = mx_add(rez, s[*i], i);
@@ -69,11 +69,7 @@ char *mx_open_quotes(char *s, t_ost *tost) {
 }
 
 char *mx_parse_slash(char *str, char *s, int *i) {
-    char *rez = mx_strdup(str);
-
-    rez = mx_add(rez, s[*i], i);
-    rez = mx_add(rez, s[*i], i);
-    if (str)
-        free(str);
-    return rez;
+    str = mx_add(str, s[*i], i);
+    str = mx_add(str, s[*i], i);
+    return str;
 }

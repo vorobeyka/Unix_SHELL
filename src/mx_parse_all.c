@@ -10,39 +10,6 @@ char *cut_str_n(char *str) {
     return rez;
 }
 
-static char *prog_out_part(int fd) {
-    char ch;
-    char *str = NULL;
-
-    while (read(fd, &ch, 1) != 0) {
-        if (ch == '\n')
-            str = mx_join_char(str, ' ');
-        else
-            str = mx_join_char(str, ch);
-    }
-    str[mx_strlen(str) - 1] = '\0';
-    return str;
-}
-char *mx_prog_out(char *line, t_ost *tost) {
-    if (!line)
-        return NULL;
-    char *str = NULL;
-    int fd[2];
-    int old = -1;
-
-    if (pipe(fd) == -1)
-        perror("ush: pipe");
-    old = dup(STDOUT_FILENO);
-    dup2(fd[1], STDOUT_FILENO);
-    close(fd[1]);
-    mx_start(tost, line);
-    dup2(old, STDOUT_FILENO);
-    close(old);
-    str = prog_out_part(fd[0]);
-    close(fd[0]);
-    return str;
-}
-
 char *parse_home(char *s) {
     char *rez = NULL;
 
@@ -57,12 +24,19 @@ char *parse_home(char *s) {
 }
 
 char *mx_cut_subsh(char *str) {
-    char *rez = NULL;
+    char *s = str;
 
-    if (str[0] == '(' && str[mx_strlen(str) - 1] == ')') {
-        for (int i = 1; i < mx_strlen(str) - 1; )
-            rez = mx_add(rez, str[i], &i);
-        return rez;
+    for ( ; s && *s == ' '; s++);
+    if (*s == '(' || *s == '{') {
+        char c = *s == '(' ? ')' : '}';
+        int i = mx_strlen(s) - 2;
+
+        s++;
+        for ( ; s[i] == ' '; i--);
+        if (s[i] == c) {
+            i--;
+            return mx_strndup(s, i + 1);
+        }
     }
     return mx_strdup(str);
 }
@@ -73,7 +47,6 @@ char **mx_parse_all(char *line, t_ost *tost) {
     char **splited = NULL;
     char *tmp = NULL;
 
-    // mx_long_print(line, "\t", NULL, NULL);
     if (line) {
         new_line = mx_cut_subsh(line);
         rez = mx_split_commands(new_line, tost);

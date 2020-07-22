@@ -37,8 +37,9 @@ char **mx_trim_split(char *command, char c) {
 }
 
 char *mx_add(char *str, char c, int *i) {
-    if (c == '\0')
+    if (c == '\0') {
         return str;
+    }
     int len = str ? mx_strlen(str) : 0;
     char *rez = (char *) malloc((len + 2) * sizeof(char));
 

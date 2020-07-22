@@ -30,13 +30,12 @@ void mx_clean_history(t_history *node) {
 }
 
 int pre_builtin(char *src, t_ost *tost) {
-    tost->pars = 1;
+    tost->trim = 1;
     int result = 0;
     char **s = mx_parse_all(src, tost);
 
     result = mx_builtin(s, tost);
     mx_del_strarr(&s);
-    tost->pars = 0;
     return result;
 }
 

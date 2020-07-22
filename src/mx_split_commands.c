@@ -10,16 +10,31 @@ static char *to_add(char *add, char *str, int *i, int *err) {
     return add;
 }
 
-static char *add_to_command_x2(char *str, char *s, int *i, t_ost *tost) {
-    if (mx_check_quote(s[*i]) > 0) {
-        char c = s[*i];
+static char *add_ods(char *str, char *s, int *i) {
+     char c = s[*i];
 
+    str = mx_add(str, s[*i], i);
+    for ( ; s[*i] && s[*i] != c; ) {
+        if (s[*i] == '\\') {
+            str = mx_add(str, s[*i], i);
+            str = mx_add(str, s[*i], i);
+        }
+        else {
+            str = mx_add(str, s[*i], i);
+        }
+    }
+    str = mx_add(str, s[*i], i);
+    return str;
+}
+
+static char *add_to_command_x2(char *str, char *s, int *i, t_ost *tost) {
+    if (s[*i] == '\\') {
         str = mx_add(str, s[*i], i);
-        for ( ; s[*i] && s[*i] != c; )
-            str = mx_add(str, s[*i], i);
-        if (s[*i])
-            str = mx_add(str, s[*i], i);
+        str = mx_add(str, s[*i], i);
         return str;
+    }
+    else if (mx_check_quote(s[*i]) > 0) {
+        return add_ods(str, s, i);
     }
     else if (s[*i] == '$' && s[*i + 1] == '(') {
         *i += 1;
@@ -53,6 +68,8 @@ char **mx_split_commands(char *str, t_ost *tost) {
 
     for (int i = 0; str && str[i] != '\0'; ) {
         mx_shift_spaces(str, &i);
+        if (str[i] == '\0')
+            break;
         add = to_add(add, str, &i, &tost->error);
         if (tost->error) {
             mx_free_mass(add, NULL, NULL, NULL);
