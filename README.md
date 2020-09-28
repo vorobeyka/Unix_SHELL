@@ -23,7 +23,7 @@ and a host of other features.
 | Builtin  | Description |
 |:-:|:-:|
 |**cd**| Change the working directory |
-|**pwd**| Wites the full pathname of the current working directory |
+|**pwd**| Writes the full pathname of the current working directory |
 |**chdir**| Change the working directory|
 |**unset**| Remove variable or function names from enviroment |
 |**export**| Set the export attribute for variables to enviroment|
